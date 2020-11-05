@@ -1,0 +1,21 @@
+{% extends 'main/template.html' %}
+
+{% block 'content' %}
+    <h1>Статьи</h1>
+
+    {% if is_admin %}
+        <a class="btn_add" href="{% url 'add_news' %}">Добавить</a>
+    {% endif %}
+
+    <div class="news_blocks">
+        {% for news in newses %}
+        <div class="news_block">
+            <a class="news_title" href="{% url 'view_news' news.pk %}">{{ news.title }}</a>
+            <div>
+                <img src="{{ news.main_image_link }}" />
+                <p class="news_description">{{ news.description }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

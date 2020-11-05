@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="MobileOptimized" content="320" />
+
+    <title>{{ page_title }}</title>
+    <meta name="description" content="{{ description }}" />
+    <meta name="keywords" content="{{ keywords }}" />
+    <link rel="shortcut icon" href="{% static "main/favicon.ico" %}" type="image/x-icon" />
+    <link href="{% static "main/css/index.css" %}" rel="stylesheet" type="text/css" media="screen" />
+    <script src="{% static "/main/js/functions.js" %}"></script>
+    {% block 'head' %}
+    {% endblock %}
+</head>
+<body>
+    <div class="navigation">
+        <div class="container">
+            <div class="navigation_header"></div>
+            <ul>
+                {% with url_name=request.resolver_match.url_name %}
+                    <li><a href="{% url 'index' %}"><svg
+   width="102.17413mm"
+   height="90.701439mm"
+   viewBox="0 0 102.17413 90.701439"
+   version="1.1"
+   id="icon_home">
+  <g
+     id="layer1"
+     transform="translate(-30.309336,-109.75727)">
+    <path
+       id="path30-8"
+       style="fill:#0000ff;fill-opacity:1;fill-rule:evenodd;stroke-width:0.33;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 80.396717,109.75727 -50.087381,45.23083 19.262908,-0.21756 v 45.68817 h 63.499996 v -46.40595 l 19.41122,-0.21911 z m 0.131776,12.6199 17.577738,15.52619 H 64.057146 Z m -22.282361,39.6074 h 28.144536 v 24.11688 H 58.246132 Z"
+       />
+  </g>
+</svg></a></li>
+                    <li{% if url_name in 'all_news,edit_news,view_news,add_news' %} class="active"{% endif %}><a href="{% url 'all_news' %}">Статьи</a></li>
+                    <li{% if url_name == 'broadcasts' %} class="active"{% endif %}><a href="{% url 'broadcasts' %}">Трансляции</a></li>
+                    <li{% if url_name in 'door2door,edit_campaign,add_campaign,select_street,edit_street,add_street,select_house,edit_house,add_house,select_flat,add_flat,edit_flat' %} class="active"{% endif %}><a href="{% url 'door2door' %}">Обход</a></li>
+                    <!--<li{% if url_name == 'shop' %} class="active"{% endif %}><a href="{% url 'shop' %}">Сувениры</a></li>-->
+                {% endwith %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="container">
+            {% block 'content' %}content{% endblock %}
+        </div>
+    </div>
+        
+    <div class="footer">
+        <div class="container">
+            Это футер. Здесь появятся реквизиты, контакты, ссылки на соцсети
+        </div>
+    </div>
+</body>

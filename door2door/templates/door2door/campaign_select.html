@@ -1,0 +1,17 @@
+{% extends 'main/template.html' %}
+
+{% block 'content' %}
+
+    <h1>{{ page_title }}</h1>
+
+    {% for campaign in campaigns %}
+        <div class="campaign">
+            <a class="campaign-title" href="{% url 'select_street' campaign.pk %}">{{ campaign.fio_candidate }} - {{ campaign.name }}</a>
+            <a href="{% url 'edit_campaign' campaign.pk %}">ред.</a>
+            <br>
+            <a class="campaign-place" href="{% url 'select_street' campaign.pk %}">{{ campaign.region }}, {{ campaign.rayon }}, {{ campaign.settlement }}</a>
+        </div>
+    {% endfor %}
+
+    <a class="btn_add" href="{% url 'add_campaign' %}">Добавить</a>
+{% endblock %}

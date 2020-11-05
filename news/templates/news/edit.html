@@ -1,0 +1,63 @@
+{% extends 'main/template.html' %}
+
+{% block 'head' %}
+    <script src="https://cdn.ckeditor.com/ckeditor5/23.1.0/classic/ckeditor.js"></script>
+{% endblock %}
+
+{% block 'content' %}
+    <h1>{{ page_title }}</h1>
+    <div style="text-align: right"><a id="view_url" target="_blank" href="{% if news.pk %}{% url 'view_news' news.pk %}{% endif %}">Посмотреть в новой вкладке</a></div>
+
+    <form>
+        {% csrf_token %}
+        <input type="hidden" name="id" value="{{ news.pk|default:"" }}">
+        
+        <div class="table" align="left">
+
+            <div class='table_cell left_cell'>Заголовок:</div>
+            <div class='table_cell right_cell'><input type="text" name="title" value="{{ news.title }}"></div>
+
+            <!--description: <input type="text" name="" value="{{ news.page_description }}">
+            <br>-->
+            <!--keywords: <input type="text" name="" value="{{ news.page_keywords }}">
+            <br>-->
+
+            <div class='table_cell left_cell'>Заглавное изображение:</div>
+            <div class='table_cell right_cell'><input type="file" name="main_image_link" value="{{ news.main_image_link }}"></div>
+
+            <br>
+    
+            <div class='table_cell left_cell'>Описание:<br></div>
+            <div class='table_cell right_cell'><textarea name="description" rows="8" cols="40">{{ news.description }}</textarea></div>
+
+            <br>
+                
+            <div class='table_cell left_cell'>Статья:</div>
+            
+            <br>
+            
+            <div class='table_cell right_cell plate'>
+                <div id="editor">{{ news.article|safe }}</div>
+            </div>
+
+            <br>
+
+            <!--Прикрепить файлы: <input type="file" name="">-->
+            <div class='table_cell left_cell'></div>
+
+            <div class='table_cell right_cell' style="text-align: right;">
+                <input type="button" value="Сохранить" onclick="sendform(this, {'url': '{% url "save_news" %}', 'func_success': function(res, form) {form.id.value=res.data.id;window.view_url.href=res.data.view_url;}, data: {'article': get_from_ckeditor()} })">
+            </div>
+
+        </div>
+
+    </form>
+    
+    <script>
+    ClassicEditor
+        .create( document.querySelector( '#editor' ) )
+        .catch( error => {
+            console.error( error );
+        } );
+    </script>
+{% endblock %}

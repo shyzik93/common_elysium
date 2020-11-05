@@ -1,0 +1,15 @@
+{% extends 'main/template.html' %}
+
+{% block 'content' %}
+
+    <h1>{{ page_title }}</h1>
+
+    {% for street in streets %}
+        <div class="street">
+            <a class="street-title" href="{% url 'select_house' street.pk %}">{{ street.type_id.short_name }}. {{ street.name }}</a>
+            <a href="{% url 'edit_street' campaign_pk street.pk %}">ред.</a>
+        </div>
+    {% endfor %}
+
+    <a class="btn_add" href="{% url 'add_street' campaign_pk %}">Добавить</a>
+{% endblock %}

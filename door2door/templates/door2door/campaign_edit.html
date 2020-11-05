@@ -1,0 +1,24 @@
+{% extends 'main/template.html' %}
+
+{% block 'content' %}
+
+    <h1>{{page_title}}</h1>
+
+    <form method="post" action="{% url 'save_campaign' %}">
+        {% csrf_token %}
+        <input type="hidden" name="id" value="{{ pk|default:"" }}">
+
+        {{ campaign.region }}
+        <br>
+        {{ campaign.rayon }}
+        <br>
+        {{ campaign.settlement }}
+        <br>
+        {{ campaign.fio_candidate }}
+        <br>
+        {{ campaign.name }}
+        <br><br>
+        <input type="button" value="Добавить" onclick="sendform(this, {'url': '{% url "save_campaign" %}', 'func_success': function(res, form) {form.id.value=res.data.id;} })">
+    </form>
+
+{% endblock %}

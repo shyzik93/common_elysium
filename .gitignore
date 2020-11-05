@@ -1,0 +1,4 @@
+HelloDjango/settings/local.py
+__pycache__/
+HelloDjango/tmp/restart.txt
+HelloDjango/passenger_wsgi.py

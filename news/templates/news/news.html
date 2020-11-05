@@ -1,0 +1,51 @@
+{% extends 'main/template.html' %}
+
+{% block 'head' %}
+    <!-- Put this script tag to the <head> of your page -->
+    <script type="text/javascript" src="https://vk.com/js/api/share.js?94" charset="windows-1251"></script>
+{% endblock %}
+
+
+{% block 'content' %}
+    <h1>{{ news.title }}</h1>
+    
+    {% if is_admin %}
+        <div style="text-align: right"><a href="{% url 'edit_news' news.pk %}">Редактировать</a></div>
+    {% endif %}
+    <div style="text-align: right">
+        <span style="color:grey;">{{ news.date_create|date:'Y-m-d H:i' }}</span>
+    </div>
+    
+    <br>
+
+    <div class="article">{{ news.article|safe }}</div>
+    
+    <br><br>
+    <div style="width:100%;text-align:right;">
+        <div style='display:inline-block;vertical-align:baseline;'>
+            <!-- Put this script tag to the place, where the Share button will be -->
+            <script type='text/javascript'><!--
+                document.write(VK.Share.button(false,{type: 'round', text: 'Поделиться'}));
+            --></script>
+        </div>
+        <div style='display:inline-block;vertical-align:baseline;'>
+            <div id="ok_shareWidget"></div>
+            <script>
+            !function (d, id, did, st, title, description, image) {
+              var js = d.createElement("script");
+              js.src = "https://connect.ok.ru/connect.js";
+              js.onload = js.onreadystatechange = function () {
+              if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
+                if (!this.executed) {
+                  this.executed = true;
+                  setTimeout(function () {
+                    OK.CONNECT.insertShareWidget(id,did,st, title, description, image);
+                  }, 0);
+                }
+              }};
+              d.documentElement.appendChild(js);
+            }(document,"ok_shareWidget",document.URL,'{"sz":20,"st":"rounded","ck":1}',"","","");
+            </script>
+        </div>
+    </div>
+{% endblock %}

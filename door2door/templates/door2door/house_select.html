@@ -1,0 +1,20 @@
+{% extends 'main/template.html' %}
+
+{% block 'content' %}
+
+    <h1>{{ page_title }}</h1>
+
+    {% for house in houses %}
+        <div class="house">
+            <a class="house-number" href="{% if house.type == 2 %}{% url 'select_flat' street_pk house.pk %}{% else %}{% url 'reaction' house.pk %}{% endif %}">{{ house.number }}</a>
+            <!--<a href="{% url 'edit_house' street_pk house.pk %}">ред.</a>-->
+            <span class="house-type">
+                <span>{% if house.type == 1 %}частный{% elif house.type == 2 %}мкд{% elif house.type == 3 %}квартира{% endif %}</span>
+            </span>
+        </div>
+    {% endfor %}
+    
+    <br><br>
+
+    <a class="btn_add" href="{% if not house_pk %}{% url 'add_house' street_pk %}{% else %}{% url 'add_flat' street_pk house_pk %}{% endif %}">Добавить</a>
+{% endblock %}
