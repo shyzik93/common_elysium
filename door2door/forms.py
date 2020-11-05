@@ -1,4 +1,4 @@
-from django.forms import ModelForm, TextInput, Select, HiddenInput
+from django.forms import ModelForm, TextInput, Select, HiddenInput, Textarea
 
 from door2door.models import CampaignModel, StreetModel, HouseModel
 
@@ -46,4 +46,9 @@ class ReactionForm(ModelForm):
     
     class Meta:
         model = HouseModel
-        fields = []
+        fields = ['problem_description', 'comment']
+        
+        widgets = {
+            'problem_description': Textarea(attrs={'placeholder': HouseModel._meta.get_field('problem_description').verbose_name}),
+            'comment': Textarea(attrs={'placeholder': HouseModel._meta.get_field('comment').verbose_name}),
+        }

@@ -1,11 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponse
 
 from utils.utils import get_success, get_error, get_absent_fields_list
 from door2door.models import CampaignModel, StreetModel, HouseModel
-from door2door.forms import CampaignForm, StreetForm, HouseForm
+from door2door.forms import CampaignForm, StreetForm, HouseForm, ReactionForm
+from door2door.constants import TYPE_HOUSE_MULTIFLAT
 
 
 def select_campaign(request):
@@ -168,9 +169,15 @@ def save_house(request):
 
 
 def reaction(request, pk):
+    queryset = HouseModel.objects.exclude(type=TYPE_HOUSE_MULTIFLAT)
+    house = get_object_or_404(queryset, pk=pk)
+    reaction = ReactionForm(instance=house)
+
     context = {
         'page_title': 'Реакция',
         'pk': pk,
+        'house': house,
+        'reaction': reaction,
         'description': '',
         'keywords': '',
     }
