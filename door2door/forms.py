@@ -42,7 +42,7 @@ class HouseForm(ModelForm):
         }
 
 
-class ReactionForm(ModelForm):
+class ReactionCommentForm(ModelForm):
     
     class Meta:
         model = HouseModel

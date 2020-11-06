@@ -4,15 +4,18 @@
 
     <h1>{{page_title}}</h1>
     
-    <div class="reaction-btns">
-        <div class="reaction-btn" class="reaction-{% if house.is_openned == 1 %}yes{% elif house.is_openned == 0 %}no{% elif house.is_openned is null %}unknown{% endif %}">ДВЕРЬ ОТКР</div>
-        <div class="reaction-btn" class="reaction-{% if house.is_interesed == 1 %}yes{% elif house.is_interesed == 0 %}no{% elif house.is_interesed is null %}unknown{% endif %}">ИНТЕРЕС</div>
-        <div class="reaction-btn" class="reaction-{% if house.is_recieved == 1 %}yes{% elif house.is_recieved == 0 %}no{% elif house.is_recieved is null %}unknown{% endif %}">ПРИНЯЛИ/ПОДПИСАЛИ</div>
+    <div class="reaction_btns">
+        <div class="reaction_btn reaction_{% if house.is_openned == 1 %}yes{% elif house.is_openned == 0 %}no{% elif house.is_openned is null %}unknown{% endif %}">ДВЕРЬ</div>
+        <div class="reaction_btn reaction_{% if house.is_interesed == 1 %}yes{% elif house.is_interesed == 0 %}no{% elif house.is_interesed is null %}unknown{% endif %}">ИНТЕРЕС</div>
+        <div class="reaction_btn reaction_{% if house.is_recieved == 1 %}yes{% elif house.is_recieved == 0 %}no{% elif house.is_recieved is null %}unknown{% endif %}">ПРИНЯЛИ</div>
     </div>
     
-    <form method="post" action="">
-        {{ reaction.problem_description }}
-        {{ comment }}
+    <br><br>
+    
+    <form class="reaction_comment" method="post" action="{% url 'save_reaction_comment' house.pk %}" onchange="sendform(this)">
+        {% csrf_token %}
+        {{ reaction_comment.problem_description }}
+        {{ reaction_comment.comment }}
     </form>
     
 {% endblock %}

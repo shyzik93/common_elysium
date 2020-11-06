@@ -41,9 +41,9 @@ class HouseModel(models.Model):
     number = models.CharField(max_length=10, null=False, verbose_name="Номер дома")
     # тип здания: 1 - частный дом, 2 - многоквартирный, 3 - квартира
     type = models.IntegerField(null=False, verbose_name="Тип дома")
-    group_id = models.ForeignKey('self', on_delete=models.CASCADE, null=True) # ID многоквартирного дома
+    group_id = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True) # ID многоквартирного дома
     is_openned = models.IntegerField(verbose_name="Отрыли", null=True)
     is_interesed = models.IntegerField(verbose_name="Интерес", null=True)
     is_recieved = models.IntegerField(verbose_name="Приняли", null=True)
-    problem_description = models.TextField(null=False, default='', verbose_name="Проблемы/наказы избирателя")
-    comment = models.CharField(max_length=255, null=False, default='', verbose_name="Произвольный комментарий")
+    problem_description = models.TextField(null=False, default='', verbose_name="Проблемы/наказы избирателя", blank=True)
+    comment = models.CharField(max_length=255, null=False, default='', verbose_name="Произвольный комментарий", blank=True)

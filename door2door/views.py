@@ -5,11 +5,12 @@ from django.http import HttpResponse
 
 from utils.utils import get_success, get_error, get_absent_fields_list
 from door2door.models import CampaignModel, StreetModel, HouseModel
-from door2door.forms import CampaignForm, StreetForm, HouseForm, ReactionForm
+from door2door.forms import CampaignForm, StreetForm, HouseForm, ReactionCommentForm
 from door2door.constants import TYPE_HOUSE_MULTIFLAT
 
 
 def select_campaign(request):
+    """ Отображает страницу выбора кампании """
     campaigns = CampaignModel.objects.all().order_by('-date_create')
     context = {
         'page_title':'Кампании',
@@ -22,6 +23,7 @@ def select_campaign(request):
 
 
 def edit_campaign(request, pk=''):
+    """ Отображает форму для добавления/редактирования кампании """
     campaign = CampaignModel.objects.get(pk=pk) if pk else CampaignModel()
     form_campaign = CampaignForm(instance=campaign)
     context = {
@@ -37,6 +39,7 @@ def edit_campaign(request, pk=''):
 @csrf_protect
 @require_POST
 def save_campaign(request):
+    """ Сохраняет свойства кампании с формы """
     pk = request.POST.get('id')
     try:
         campaign = CampaignModel.objects.get(pk=pk) if pk else None
@@ -59,6 +62,7 @@ def save_campaign(request):
 
 
 def select_street(request, campaign_pk):
+    """ Отображает страницу выбора улицы """
     streets = StreetModel.objects.filter(campaign_id=campaign_pk).order_by('-date_create')
     context = {
         'page_title':'Выберите улицу',
@@ -72,6 +76,7 @@ def select_street(request, campaign_pk):
 
 
 def edit_street(request, campaign_pk, pk=''):
+    """ Отображает форму для добавления/редактирования улицы """
     street = StreetModel.objects.get(pk=pk, campaign_id=campaign_pk) if pk else StreetModel(campaign_id=CampaignModel(pk=campaign_pk))
     form_street = StreetForm(instance=street)
     context = {
@@ -87,6 +92,7 @@ def edit_street(request, campaign_pk, pk=''):
 @csrf_protect
 @require_POST
 def save_street(request):
+    """ Сохраняет свойства улицы с формы """
     pk = request.POST.get('id')
     campaign_pk = request.POST.get('campaign_id')
     try:
@@ -110,6 +116,7 @@ def save_street(request):
 
 
 def select_house(request, street_pk, house_pk=None):
+    """ Отображает страницу выбора МКД/квартиры/частного дома """
     houses = HouseModel.objects.filter(street_id=street_pk, group_id=house_pk).order_by('-date_create')
     context = {
         'page_title':'Выберите {}'.format('квартиру' if house_pk else 'дом'),
@@ -124,6 +131,7 @@ def select_house(request, street_pk, house_pk=None):
 
 
 def edit_house(request, street_pk, **kwargs):
+    """ Отображает форму для добавления/редактирования МКД/квартиры/частного дома """
     house_pk = kwargs.get('house_pk')
     pk = kwargs.get('pk')
 
@@ -145,6 +153,7 @@ def edit_house(request, street_pk, **kwargs):
 @csrf_protect
 @require_POST
 def save_house(request):
+    """ Сохраняет свойства МКД/квартиры/частного дома с формы """
     pk = request.POST.get('id')
     street_pk = request.POST.get('street_id')
     house_pk = request.POST.get('group_id')
@@ -169,16 +178,38 @@ def save_house(request):
 
 
 def reaction(request, pk):
+    """ Отображает панель реакции частного дома/квартиры """
     queryset = HouseModel.objects.exclude(type=TYPE_HOUSE_MULTIFLAT)
     house = get_object_or_404(queryset, pk=pk)
-    reaction = ReactionForm(instance=house)
+    reaction_comment = ReactionCommentForm(instance=house)
 
     context = {
         'page_title': 'Реакция',
         'pk': pk,
         'house': house,
-        'reaction': reaction,
+        'reaction_comment': reaction_comment,
         'description': '',
         'keywords': '',
     }
     return render(request, 'door2door/reaction.html', context)
+    
+
+@csrf_protect
+@require_POST
+def save_reaction_comment(request, pk):
+    """ Редактирует комментарий частного дома/квартиры """
+    try:
+        house = HouseModel.objects.exclude(type=TYPE_HOUSE_MULTIFLAT).get(pk=pk)
+    except HouseModel.DoesNotExist as err:
+        return HttpResponse(get_error('Дом не существует!'))
+
+    form_house = ReactionCommentForm(request.POST, instance=house)
+    
+    if form_house.is_valid():
+        form_house.save()
+        answer = get_success('Обновлено')
+    else:
+        absent_fields, msg_err = get_absent_fields_list(form_house)
+        answer = get_error('Ошибка: {}'.format(msg_err), {'absent_fields': absent_fields})
+
+    return HttpResponse(answer)
