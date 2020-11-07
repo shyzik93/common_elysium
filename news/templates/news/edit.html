@@ -24,17 +24,15 @@
             <!--keywords: <input type="text" name="" value="{{ news.page_keywords }}">
             <br>-->
 
-            <div class='table_cell left_cell'>Заглавное изображение:</div>
-            <div class='table_cell right_cell'><input type="file" name="main_image_link" value="{{ news.main_image_link }}"></div>
-
-            <br>
-    
-            <div class='table_cell left_cell'>Описание:<br></div>
-            <div class='table_cell right_cell'><textarea name="description" rows="8" cols="40">{{ news.description }}</textarea></div>
-
-            <br>
-                
-            <div class='table_cell left_cell'>Статья:</div>
+            <div class='table_cell left_cell'>
+                <div style="width: 150px; height: 150px; position: relative; display: inline-block;">
+                    <img src="" id="news_main_image" style="width: 150px; height: auto; cursor: pointer;  position: absolute; top: 0; left: 0;">
+                    <input type="file" name="main_image_link" style="opacity: 0; display: block; width: 100%; height: 100%; position: absolute; top: 0; left: 0;" onchange="show_image(this, news_main_image);">
+                </div>
+            </div>
+            <div class='table_cell right_cell'>
+                <textarea name="description" rows="8" cols="40" placeholder="Описание">{{ news.description }}</textarea>
+            </div>
             
             <br>
             
