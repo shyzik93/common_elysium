@@ -1,21 +1,47 @@
 {% extends 'main/template.html' %}
+{% load static %}
+
+{% block 'head' %}
+    <link href="{% static "door2door/css/index.css" %}" rel="stylesheet" type="text/css" media="screen" />
+{% endblock %}
 
 {% block 'content' %}
-
     <h1>{{page_title}}</h1>
     
-    <div class="reaction_btns">
-        <div class="reaction_btn reaction_{% if house.is_openned == 1 %}yes{% elif house.is_openned == 0 %}no{% elif house.is_openned is null %}unknown{% endif %}">ДВЕРЬ</div>
-        <div class="reaction_btn reaction_{% if house.is_interesed == 1 %}yes{% elif house.is_interesed == 0 %}no{% elif house.is_interesed is null %}unknown{% endif %}">ИНТЕРЕС</div>
-        <div class="reaction_btn reaction_{% if house.is_recieved == 1 %}yes{% elif house.is_recieved == 0 %}no{% elif house.is_recieved is null %}unknown{% endif %}">ПРИНЯЛИ</div>
+    <div class="reaction_btns" id="reaction_btns">
+        <div class="reaction_btn" data-reaction_name="is_openned" data-reaction_value="{% if house.is_openned == 1 %}yes{% elif house.is_openned == 0 %}no{% elif house.is_openned is null %}unknown{% endif %}">ДВЕРЬ</div>
+        <div class="reaction_btn" data-reaction_name="is_interesed" data-reaction_value="{% if house.is_interesed == 1 %}yes{% elif house.is_interesed == 0 %}no{% elif house.is_interesed is null %}unknown{% endif %}">ИНТЕРЕС</div>
+        <div class="reaction_btn" data-reaction_name="is_recieved" data-reaction_value="{% if house.is_recieved == 1 %}yes{% elif house.is_recieved == 0 %}no{% elif house.is_recieved is null %}unknown{% endif %}">ПРИНЯЛИ</div>
     </div>
     
     <br><br>
     
-    <form class="reaction_comment" method="post" action="{% url 'save_reaction_comment' house.pk %}" onchange="sendform(this)">
+    <form class="reaction_comment" method="post" action="{% url 'save_reaction_comment' house.pk %}" onchange="sendform(this);">
         {% csrf_token %}
         {{ reaction_comment.problem_description }}
         {{ reaction_comment.comment }}
     </form>
     
+    <script>
+        function send_reaction(event) {
+            let btn = event.target;
+            reaction_name = btn.dataset.reaction_name;
+            reaction_value = btn.dataset.reaction_value;
+            if (reaction_value == 'unknown') reaction_value = 'yes';
+            else if (reaction_value == 'yes') reaction_value = 'no';
+            else if (reaction_value == 'no') reaction_value = 'unknown';
+            sendform(btn.parentElement, {
+                'url': '{% url "save_reaction" house.pk %}',
+                'data': {
+                    'name': reaction_name,
+                    'value': reaction_value,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                'func_success': function(res, form) {
+                    btn.dataset.reaction_value = reaction_value;
+                }
+            })
+        }
+        reaction_btns.addEventListener('click', send_reaction);
+    </script>
 {% endblock %}

@@ -24,4 +24,5 @@ urlpatterns = [
 
     url(r'^reaction/(?P<pk>[0-9]+)$', views.reaction, name='reaction'),
     url(r'^reaction/save_comment/(?P<pk>[0-9]+)$', views.save_reaction_comment, name='save_reaction_comment'),
+    url(r'^reaction/save_reaction/(?P<pk>[0-9]+)$', views.save_reaction, name='save_reaction'),
 ]

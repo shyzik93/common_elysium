@@ -197,7 +197,7 @@ def reaction(request, pk):
 @csrf_protect
 @require_POST
 def save_reaction_comment(request, pk):
-    """ Редактирует комментарий частного дома/квартиры """
+    """ Сохраняет комментарий частного дома/квартиры """
     try:
         house = HouseModel.objects.exclude(type=TYPE_HOUSE_MULTIFLAT).get(pk=pk)
     except HouseModel.DoesNotExist as err:
@@ -213,3 +213,36 @@ def save_reaction_comment(request, pk):
         answer = get_error('Ошибка: {}'.format(msg_err), {'absent_fields': absent_fields})
 
     return HttpResponse(answer)
+
+
+@csrf_protect
+@require_POST
+def save_reaction(request, pk):
+    """
+    Сохраняет реакцию:
+    открыли ли дверь, как встретили, приняли ли листовку или дали ли подпись
+    """
+    reaction_values = {
+        'unknown': None,
+        'no': 0,
+        'yes': 1,
+    }
+    reaction_names = ('is_openned', 'is_interesed', 'is_recieved')
+    
+    try:
+        house = HouseModel.objects.exclude(type=TYPE_HOUSE_MULTIFLAT).get(pk=pk)
+    except HouseModel.DoesNotExist as err:
+        return HttpResponse(get_error('Дом не существует!'))
+    reaction_name = request.POST.get('name')
+    reaction_value = request.POST.get('value')
+    
+    if reaction_name not in reaction_names:
+        return HttpResponse(get_error('Неверное название реакции!'))
+    if reaction_value not in reaction_values:
+        return HttpResponse(get_error('Неверное значение реакции!'))
+    
+    setattr(house, reaction_name, reaction_values[reaction_value])
+    house.save()
+    
+    return HttpResponse(get_success('Реакция обновлена'))
+    

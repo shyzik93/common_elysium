@@ -1,6 +1,8 @@
 {% extends 'main/template.html' %}
+{% load static %}
 
 {% block 'head' %}
+    <link href="{% static "news/css/index.css" %}" rel="stylesheet" type="text/css" media="screen" />
     <script src="https://cdn.ckeditor.com/ckeditor5/23.1.0/classic/ckeditor.js"></script>
 {% endblock %}
 

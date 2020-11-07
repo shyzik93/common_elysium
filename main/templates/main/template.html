@@ -40,7 +40,7 @@
 </svg></a></li>
                     <li{% if url_name in 'all_news,edit_news,view_news,add_news' %} class="active"{% endif %}><a href="{% url 'all_news' %}">Статьи</a></li>
                     <li{% if url_name == 'broadcasts' %} class="active"{% endif %}><a href="{% url 'broadcasts' %}">Трансляции</a></li>
-                    <li{% if url_name in 'door2door,edit_campaign,add_campaign,select_street,edit_street,add_street,select_house,edit_house,add_house,select_flat,add_flat,edit_flat' %} class="active"{% endif %}><a href="{% url 'door2door' %}">Обход</a></li>
+                    <li{% if url_name in 'door2door,edit_campaign,add_campaign,select_street,edit_street,add_street,select_house,edit_house,add_house,select_flat,add_flat,edit_flat,reaction,save_reaction_comment' %} class="active"{% endif %}><a href="{% url 'door2door' %}">Обход</a></li>
                     <!--<li{% if url_name == 'shop' %} class="active"{% endif %}><a href="{% url 'shop' %}">Сувениры</a></li>-->
                 {% endwith %}
             </ul>

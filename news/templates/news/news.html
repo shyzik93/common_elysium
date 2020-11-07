@@ -1,6 +1,8 @@
 {% extends 'main/template.html' %}
+{% load static %}
 
 {% block 'head' %}
+    <link href="{% static "news/css/index.css" %}" rel="stylesheet" type="text/css" media="screen" />
     <!-- Put this script tag to the <head> of your page -->
     <script type="text/javascript" src="https://vk.com/js/api/share.js?94" charset="windows-1251"></script>
 {% endblock %}

@@ -1,4 +1,9 @@
 {% extends 'main/template.html' %}
+{% load static %}
+
+{% block 'head' %}
+    <link href="{% static "news/css/index.css" %}" rel="stylesheet" type="text/css" media="screen" />
+{% endblock %}
 
 {% block 'content' %}
     <h1>Статьи</h1>
