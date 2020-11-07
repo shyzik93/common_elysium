@@ -158,7 +158,10 @@ def save_house(request):
     street_pk = request.POST.get('street_id')
     house_pk = request.POST.get('group_id')
     try:
-        house = HouseModel.objects.get(pk=pk, street_id=StreetModel(pk=street_pk), group_id=HouseModel(pk=house_pk)) if pk else None
+        if house_pk:
+            house = HouseModel.objects.get(pk=pk, street_id=StreetModel(pk=street_pk), group_id=HouseModel(pk=house_pk)) if pk else None
+        else:
+            house = HouseModel.objects.get(pk=pk, street_id=StreetModel(pk=street_pk)) if pk else None
     except StreetModel.DoesNotExist as err:
         return HttpResponse(get_error('Дом не существует!'))
     form_house = HouseForm(request.POST, instance=house)

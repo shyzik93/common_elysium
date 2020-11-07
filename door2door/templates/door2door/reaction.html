@@ -27,6 +27,7 @@
             let btn = event.target;
             reaction_name = btn.dataset.reaction_name;
             reaction_value = btn.dataset.reaction_value;
+            if (reaction_name === undefined) return; // нажата не кнопка
             if (reaction_value == 'unknown') reaction_value = 'yes';
             else if (reaction_value == 'yes') reaction_value = 'no';
             else if (reaction_value == 'no') reaction_value = 'unknown';

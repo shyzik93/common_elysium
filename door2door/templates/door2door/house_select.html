@@ -13,6 +13,13 @@
         <div class="house">
             <a class="house-number" href="{% if house.type == 2 %}{% url 'select_flat' street_pk house.pk %}{% else %}{% url 'reaction' house.pk %}{% endif %}">{{ house.number }}</a>
             <!--<a href="{% url 'edit_house' street_pk house.pk %}">ред.</a>-->
+
+            {% if house.type != 2 %}
+                <div class="house_reaction" data-reaction_name="is_interesed" data-reaction_value="{% if house.is_interesed == 1 %}yes{% elif house.is_interesed == 0 %}no{% elif house.is_interesed is null %}unknown{% endif %}"></div>
+                <div class="house_reaction" data-reaction_name="is_openned" data-reaction_value="{% if house.is_openned == 1 %}yes{% elif house.is_openned == 0 %}no{% elif house.is_openned is null %}unknown{% endif %}"></div>
+                <div class="house_reaction" data-reaction_name="is_recieved" data-reaction_value="{% if house.is_recieved == 1 %}yes{% elif house.is_recieved == 0 %}no{% elif house.is_recieved is null %}unknown{% endif %}"></div>
+            {% endif %}
+
             <span class="house-type">
                 <span>{% if house.type == 1 %}частный{% elif house.type == 2 %}мкд{% elif house.type == 3 %}квартира{% endif %}</span>
             </span>
