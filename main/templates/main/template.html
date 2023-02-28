@@ -17,10 +17,21 @@
     {% endblock %}
 </head>
 <body>
-    <div class="navigation">
+    <div class="navigation" id="topnav">
         <div class="container">
-            <div class="navigation_header"></div>
-            <ul>
+            <div class="navigation_header">
+                <div class="workroom">
+                    <span class="title">Рабочий кабинет</span>
+                    <!-- { % if true % } -->
+                    <a href="">Войти</a>
+                    <br>
+                    <a href="">Регистрация</a>
+                    <!-- { % else % } -->
+                    <!-- { % endif % } -->
+                    <a{% if url_name in 'door2door,edit_campaign,add_campaign,select_street,edit_street,add_street,select_house,edit_house,add_house,select_flat,add_flat,edit_flat,reaction,save_reaction_comment' %} class="active"{% endif %} href="{% url 'door2door' %}">Обход</a>
+                </div>
+            </div>
+            <ul id="topnav2">
                 {% with url_name=request.resolver_match.url_name %}
                     <li><a href="{% url 'index' %}"><svg
    width="102.17413mm"
@@ -38,10 +49,12 @@
        />
   </g>
 </svg></a></li>
-                    <li{% if url_name in 'all_news,edit_news,view_news,add_news' %} class="active"{% endif %}><a href="{% url 'all_news' %}">Статьи</a></li>
-                    <li{% if url_name == 'broadcasts' %} class="active"{% endif %}><a href="{% url 'broadcasts' %}">Трансляции</a></li>
-                    <li{% if url_name in 'door2door,edit_campaign,add_campaign,select_street,edit_street,add_street,select_house,edit_house,add_house,select_flat,add_flat,edit_flat,reaction,save_reaction_comment' %} class="active"{% endif %}><a href="{% url 'door2door' %}">Обход</a></li>
-                    <!--<li{% if url_name == 'shop' %} class="active"{% endif %}><a href="{% url 'shop' %}">Сувениры</a></li>-->
+                    <li{% if url_name in 'all_news,edit_news,view_news,add_news' %} class="active"{% endif %}><a href="{% url 'all_news' %}">Блог</a></li>
+                    <!--<li{% if url_name == 'broadcasts' %} class="active"{% endif %}><a href="{% url 'broadcasts' %}">Трансляции</a></li>-->
+                    <li><a href="">Наказы</a></li>
+                    <li><a href="">Анонсы</a></li>
+                    <li><a href="">Проекты</a></li>
+                    <li{% if url_name == 'shop' %} class="active"{% endif %}><a href="{% url 'shop' %}">Лавка</a></li>
                 {% endwith %}
             </ul>
         </div>
@@ -52,7 +65,29 @@
             {% block 'content' %}content{% endblock %}
         </div>
     </div>
-        
+
+<script>
+    window.onscroll = function () {
+        var scrolled = window.pageYOffset || document.documentElement.scrollTop;
+        var tn = document.getElementById('topnav');
+        var tn2 = document.getElementById('topnav2');
+        h = parseInt(getComputedStyle(tn).height) - parseInt(getComputedStyle(tn2).height);
+        if (scrolled > h) {
+            //document.body.style.marginTop = parseInt(getComputedStyle(tn2).height) + "px";
+            tn.style.paddingBottom = parseInt(getComputedStyle(tn2).height) + "px";
+            tn2.style.position = 'fixed';
+            tn2.style.width = '80%';
+        } else {
+        //if (scrolled < h + parseInt(getComputedStyle(tn2).height)) {
+            //document.body.style.marginTop = "0";
+            tn.style.paddingBottom = "0";
+            tn2.style.position = 'static';
+            tn2.style.width = '100%';
+        }
+        tn.style.top = '-'+h+'px';
+    }
+</script>
+
     <div class="footer">
         <div class="container">
             Это футер. Здесь появятся реквизиты, контакты, ссылки на соцсети

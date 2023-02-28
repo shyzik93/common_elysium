@@ -10,7 +10,7 @@
     <h1>{{ page_title }}</h1>
     <div style="text-align: right"><a id="view_url" target="_blank" href="{% if news.pk %}{% url 'view_news' news.pk %}{% endif %}">Посмотреть в новой вкладке</a></div>
 
-    <form>
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="hidden" name="id" value="{{ news.pk|default:"" }}">
         
@@ -26,7 +26,7 @@
 
             <div class='table_cell left_cell'>
                 <div style="width: 150px; height: 150px; position: relative; display: inline-block;">
-                    <img src="" id="news_main_image" style="width: 150px; height: auto; cursor: pointer;  position: absolute; top: 0; left: 0;">
+                    <img src="{{ news.main_image_link }}" id="news_main_image" style="width: 150px; height: auto; cursor: pointer;  position: absolute; top: 0; left: 0;">
                     <input type="file" name="main_image_link" style="opacity: 0; display: block; width: 100%; height: 100%; position: absolute; top: 0; left: 0;" onchange="show_image(this, news_main_image);">
                 </div>
             </div>
@@ -46,7 +46,7 @@
             <div class='table_cell left_cell'></div>
 
             <div class='table_cell right_cell' style="text-align: right;">
-                <input type="button" value="Сохранить" onclick="sendform(this, {'url': '{% url "save_news" %}', 'func_success': function(res, form) {form.id.value=res.data.id;window.view_url.href=res.data.view_url;}, data: {'article': get_from_ckeditor()} })">
+                <input type="button" value="Сохранить" onclick="sendform(this, {'url': '{% url "save_news" %}', 'func_success': function(res, form) {form.id.value=res.data.id;window.view_url.href=res.data.view_url;alert(JSON.stringify(res));}, data: {'article': get_from_ckeditor()} })">
             </div>
 
         </div>

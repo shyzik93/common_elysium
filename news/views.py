@@ -9,6 +9,7 @@ from django.conf import settings
 from utils.utils import get_success, get_error, get_absent_fields_list
 from news.forms import NewsForm
 from news.models import NewsArticle
+from utils.models import StorageFile, save_uploaded_file
 
 
 def view_news(request, pk):
@@ -19,6 +20,7 @@ def view_news(request, pk):
         'keywords': 'новости, события',
         'news': news,
         'is_admin': True,
+        'nm': NewsArticle.objects,
     }
     return render(request, 'news/news.html', context)
 
@@ -59,12 +61,24 @@ def view_save_news(request):
     form_news = NewsForm(request.POST, instance=news_article)
     
     if form_news.is_valid():
+        main_image = request.FILES.get('main_image_link')
+        main_image_file = None
+        if main_image:
+            main_image_file = save_uploaded_file(main_image)
+            form_news.instance.main_image_link = main_image_file
+        else:
+            form_news.main_image_link = news_article.main_image_link
+            
+        #if 'main_image_link' in request.FILES:
+        #    main_image = request.FILES['main_image_link'][0]
+
         form_news.save()
         new_pk = form_news.instance.pk
         current_site = get_current_site(request)
         view_url = '{}://{}{}'.format(settings.SCHEMA, current_site.domain, reverse('view_news', args=[new_pk]))
+
         answer = get_success(
-            'Статья {}'.format('обновлена' if pk else 'добавлена'),
+            'Статья {}'.format('обновлена' if pk else 'добавлена') +'  ===  '+ str(main_image_file),
             {'data': {'view_url': view_url, 'id': new_pk}}
         )
     else:

@@ -1,5 +1,6 @@
 {% extends 'main/template.html' %}
 {% load static %}
+{% load cache %}
 
 {% block 'head' %}
     <link href="{% static "news/css/index.css" %}" rel="stylesheet" type="text/css" media="screen" />
@@ -10,6 +11,10 @@
 
 {% block 'content' %}
     <h1>{{ news.title }}</h1>
+  
+{% cache 60 'mytempl'  %}
+    Количество: {{ nm.count }}<br>
+{% endcache %}
     
     {% if is_admin %}
         <div style="text-align: right"><a href="{% url 'edit_news' news.pk %}">Редактировать</a></div>
